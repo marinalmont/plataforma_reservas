@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 // Crear reserva
 exports.createReservation = async (req, res) => {
     try {
-        const { serviceName, date, time, numberOfPeople, userEmail } = req.body;
+        const { name, date, time, numberOfPeople, userEmail } = req.body;
         const reservationDate = new Date(date);
 
         if (!isValidReservationTime(reservationDate, time)) {
@@ -30,7 +30,7 @@ exports.createReservation = async (req, res) => {
         return res.status(400).send('Capacidad máxima de 30 comensales excedida o conflicto de tiempo.');
         }
 
-        const reservation = new Reservation({ serviceName, date, time, numberOfPeople, userEmail });
+        const reservation = new Reservation({ name, date, time, numberOfPeople, userEmail });
         await reservation.save();
 
         // Enviar notificación
@@ -52,7 +52,7 @@ exports.createReservation = async (req, res) => {
 exports.editReservation = async (req, res) => {
     try {
         const { id } = req.params;
-        const { serviceName, date, time, numberOfPeople, userEmail } = req.body;
+        const { name, date, time, numberOfPeople, userEmail } = req.body;
         const reservationDate = new Date(date);
 
         if (!isValidReservationTime(reservationDate, time)) {
@@ -66,7 +66,7 @@ exports.editReservation = async (req, res) => {
         return res.status(400).send('Capacidad máxima de 30 comensales excedida o conflicto de tiempo.');
         }
 
-        const reservation = await Reservation.findByIdAndUpdate(id, { serviceName, date, time, numberOfPeople, userEmail }, { new: true });
+        const reservation = await Reservation.findByIdAndUpdate(id, { name, date, time, numberOfPeople, userEmail }, { new: true });
 
         // Enviar notificación
         const mailOptions = {
