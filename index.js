@@ -1,7 +1,8 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const conexionBD = require('./database/database');
 const reservationRoutes = require('./routes/reservationRoutes');
+const errorHandler = require('./middleware/errorHandler');
+
 
 const app = express();
 const PORT = 3000;
@@ -10,7 +11,10 @@ const PORT = 3000;
 conexionBD();
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(errorHandler);
+
+//Rutas
 app.use('/reservations', reservationRoutes);
 
 // Configuración del servidor
